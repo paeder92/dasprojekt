@@ -6,8 +6,12 @@
 
     <body>
         <form action="/createGraph" method="POST">
-            <input type="text" name="valueA" placeholder="Value A"  required autofocus>
-            <input type="text" name="valueB" placeholder="Value B" required>
+            <input type="text" name="valueA" placeholder="distribution mean"  required autofocus>
+            <input type="text" name="valueB" placeholder="standard deviation" required>
+            <select name="plotType" required>
+              <option value="plot">Plot</option>
+              <option value="hist">Histogram</option>
+            </select>
             <button type="submit">Create Graph!</button>
         </form>
         <img src="{{imageSource}}">

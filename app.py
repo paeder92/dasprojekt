@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
-import sys
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
-import io
-import matplotlib.pyplot as plt
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -16,8 +13,10 @@ def index():
 
 @app.route('/createGraph', methods=['POST'])
 def createGraph():
+    
     valueA = request.form['valueA']     # this variable stores the value of textfield "Value A"
     valueB = request.form['valueB']     # this variable stores the value of textfield "Value B"
+    plotType = request.form["plotType"]
     
     print("Value A: " + valueA)
     print("Value B: " + valueB)
@@ -25,14 +24,19 @@ def createGraph():
     # Have fun working with valueA and valueB ♥
 
     # Random Graph gets generated
-    x = np.arange(0, 100, 1)
-    y = [np.random.normal(0,1) for xs in x]
+    x = np.arange(0, 1000, 1)
+    y = [np.random.normal(float(valueA), float(valueB)) for xs in x]
 
-    
-    imageName = "paddy" +str(np.random.randint(0,1000))
+    imageName = "normal_dist_" +str(np.random.randint(0,1000))
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    axis.plot(x,y)
+    
+    if plotType == "plot":
+        axis.plot(x,y)
+        
+    elif plotType == "hist":
+        axis.hist(y, bins=20)
+    
     axis.grid(True)
     axis.set_title(imageName)
     FigureCanvas(fig).print_png("static/"+imageName+".jpg")
